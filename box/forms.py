@@ -3,9 +3,8 @@ from box.models import Author, Recipe
 
 
 class AddAuthorForm(forms.Form):
-    class AddAuthorForm(forms.ModelForm):
-        name = forms.CharField(max_length=50)
-        bio = forms.CharField(widget=forms.TextInput)
+    name = forms.CharField(max_length=50)
+    bio = forms.CharField(widget=forms.TextInput)
 
 
 class AddRecipeForm(forms.Form):
