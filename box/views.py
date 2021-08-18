@@ -1,8 +1,8 @@
-from django.shortcuts import render, HttpResponse, HttpResponseRedirect, reverse
+from django.shortcuts import render, HttpResponse, HttpResponseRedirect, reverse, redirect
 from box.models import Recipe, Author
 from box.forms import AddRecipeForm, AddAuthorForm, LoginForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 # Create your views here.
 
 
@@ -15,7 +15,7 @@ def recipe_detail(request, id):
     recipe = Recipe.objects.get(id=id)
     return render(request, 'recipe_detail.html', {'recipe': recipe})
 
-@login_required
+
 def author_detail(request, id):
     author = Author.objects.get(id=id)
     recipes = Recipe.objects.filter(author=author)
@@ -60,3 +60,8 @@ def login_view(request):
                 return HttpResponseRedirect(request.GET.get('next', reverse('home')))
     form = LoginForm()
     return render(request, 'generic_form.html', {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+    return request(redirect('/home'))

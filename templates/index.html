@@ -1,5 +1,22 @@
+
 <ul>
 {% for recipe in recipes%}
 <li><a href = "/recipe/{{recipe.id}}/">{{recipe.title}}</a></li>
 {%endfor%}
 </ul>
+<h3>Would you like to add an author or recipe?</h3>
+<ul>
+    <li>
+{#link for add author#}
+<a href="addauthor/">Click here to add an author</a>
+    </li>
+    <li>
+<a href="addrecipe/">Click here to add a recipe</a>
+{#link for add recipe#}
+    </li>
+</ul>
+
+<ul>
+    <li>
+        <a href='logout/'>Click here to logout</a>
+    </li>
