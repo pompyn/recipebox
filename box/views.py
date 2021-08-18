@@ -1,7 +1,8 @@
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect, reverse
 from box.models import Recipe, Author
-from box.forms import AddRecipeForm, AddAuthorForm
+from box.forms import AddRecipeForm, AddAuthorForm, LoginForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate
 # Create your views here.
 
 
@@ -27,7 +28,9 @@ def addauthor(request):
         if form.is_valid():
             data = form.cleaned_data
             author = Author.objects.create(name=data['name'], bio=data['bio'])
-        return HttpResponseRedirect(reverse('homepage'))
+        # return HttpResponseRedirect(reverse('homepage'))
+    return HttpResponseRedirect(request.GET.get('next', reverse('home')))
+
     form = AddAuthorForm()
     return render(request, 'generic_form.html', {'form': form})
 
@@ -40,10 +43,19 @@ def addrecipe(request):
             recipe = Recipe.objects.create(title=data['title'], author=data['author'],
                                            description=data['description'], time_required=data['time_required'],
                                            instructions=data['instructions'])
-            return HttpResponseRedirect(reverse('homepage'))
+            # return HttpResponseRedirect(reverse('homepage'))
+            return HttpResponseRedirect(request.GET.get("next", reverse("homepage")))
     form = AddRecipeForm()
     return render(request, 'generic_form.html', {'form': form})
 
 def login_view(request):
-    return HttpResponse("Login!!!")
-
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            user = authenticate(request, username=data['username'], password=data['password'])
+            if user:
+                login(request, user)
+                return HttpResponseRedirect(reverse('home'))
+    form = LoginForm()
+    return render(request, 'generic_form.html', {'form': form})
