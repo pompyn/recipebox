@@ -1,3 +1,4 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect, reverse, redirect
 from box.models import Recipe, Author
 from box.forms import AddRecipeForm, AddAuthorForm, LoginForm
@@ -20,7 +21,7 @@ def author_detail(request, id):
     recipes = Recipe.objects.filter(author=author)
     return render(request, 'author_detail.html', {'author': author, 'recipes': recipes})
 
-
+@staff_member_required
 @login_required
 def addauthor(request):
     if request.method == 'POST':
