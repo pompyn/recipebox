@@ -28,8 +28,8 @@ def addauthor(request):
         if form.is_valid():
             data = form.cleaned_data
             author = Author.objects.create(name=data['name'], bio=data['bio'])
-        # return HttpResponseRedirect(reverse('homepage'))
-    return HttpResponseRedirect(request.GET.get('next', reverse('home')))
+
+            return HttpResponseRedirect(reverse('home'))
 
     form = AddAuthorForm()
     return render(request, 'generic_form.html', {'form': form})
@@ -40,11 +40,12 @@ def addrecipe(request):
         form = AddRecipeForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
+
             recipe = Recipe.objects.create(title=data['title'], author=data['author'],
                                            description=data['description'], time_required=data['time_required'],
                                            instructions=data['instructions'])
-            # return HttpResponseRedirect(reverse('homepage'))
-            return HttpResponseRedirect(request.GET.get("next", reverse("homepage")))
+            return HttpResponseRedirect(reverse('home'))
+
     form = AddRecipeForm()
     return render(request, 'generic_form.html', {'form': form})
 
@@ -56,6 +57,6 @@ def login_view(request):
             user = authenticate(request, username=data['username'], password=data['password'])
             if user:
                 login(request, user)
-                return HttpResponseRedirect(reverse('home'))
+                return HttpResponseRedirect(request.GET.get('next', reverse('home')))
     form = LoginForm()
     return render(request, 'generic_form.html', {'form': form})
