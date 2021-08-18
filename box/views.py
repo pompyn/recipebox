@@ -3,7 +3,6 @@ from box.models import Recipe, Author
 from box.forms import AddRecipeForm, AddAuthorForm, LoginForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
-# Create your views here.
 
 
 def index_view(request):
@@ -21,6 +20,7 @@ def author_detail(request, id):
     recipes = Recipe.objects.filter(author=author)
     return render(request, 'author_detail.html', {'author': author, 'recipes': recipes})
 
+
 @login_required
 def addauthor(request):
     if request.method == 'POST':
@@ -28,11 +28,10 @@ def addauthor(request):
         if form.is_valid():
             data = form.cleaned_data
             author = Author.objects.create(name=data['name'], bio=data['bio'])
-
             return HttpResponseRedirect(reverse('home'))
-
     form = AddAuthorForm()
     return render(request, 'generic_form.html', {'form': form})
+
 
 @login_required
 def addrecipe(request):
